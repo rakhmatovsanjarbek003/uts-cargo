@@ -14,12 +14,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://web-production-bd4a3.up.railway.app',
 ]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -35,6 +29,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'cargo',
+    'warehouse',
+    'services',
     'whitenoise.runserver_nostatic',
 ]
 
@@ -71,8 +67,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'uts_cargo',     # PostgreSQL-da yaratgan bazangiz nomi
+        'USER': 'postgres',     # Foydalanuvchi nomi (odatda 'postgres')
+        'PASSWORD': 'cargo_parol', # PostgreSQL paroli
+        'HOST': '127.0.0.1',         # Agar baza serverning o'zida bo'lsa
+        'PORT': '5432',              # Standart port
     }
 }
 
@@ -135,9 +135,15 @@ JAZZMIN_SETTINGS = {
         "cargo.OnWayCargo": "fas fa-shipping-fast",
         "cargo.ArrivedCargo": "fas fa-map-marker-alt",
         "cargo.DeliveredCargo": "fas fa-check-double",
-        "cargo.SupportMessage": "fas fa-comments",
-        "cargo.TutorialVideo": "fa-solid fa-video",
-        "cargo.CalculationRequest": "fa-solid fa-calculator",
+        "services.SupportMessage": "fas fa-comments",
+        "services.TutorialVideo": "fa-solid fa-video",
+        "services.CalculationRequest": "fa-solid fa-calculator",
+        "warehouse.ArrivedGroup": "fa-solid fa-layer-group",
+        "warehouse.PaymentRequest": "fa-solid fa-credit-card",
+        "warehouse.DeliveryQueue": "fa-solid fa-cart-flatbed",
+
+
+
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-cube",

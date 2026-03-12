@@ -30,6 +30,13 @@ class User(AbstractUser):
     jshshir = models.CharField(max_length=14, null=True, blank=True)
     passport_series = models.CharField(max_length=9, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    address = models.TextField(null=True, blank=False)
+
+    # Qarindosh ma'lumotlari (ixtiyoriy)
+    relative_full_name = models.CharField(max_length=255, null=True, blank=True)
+    relative_jshshir = models.CharField(max_length=14, null=True, blank=True)
+    relative_passport_series = models.CharField(max_length=9, null=True, blank=True)
+    relative_phone = models.CharField(max_length=15, null=True, blank=True)
 
     objects = UserManager()
 

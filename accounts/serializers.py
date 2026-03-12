@@ -31,7 +31,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'user_id', 'phone', 'first_name', 'last_name',
-            'jshshir', 'passport_series', 'birth_date'
+            'jshshir', 'passport_series', 'birth_date', 'address', 'relative_full_name', 'relative_jshshir',
+            'relative_passport_series', 'relative_phone'
         ]
         extra_kwargs = {
             'phone': {'required': True, 'error_messages': {"required": "Telefon raqam kiritilishi shart."}},
@@ -41,4 +42,5 @@ class UserSerializer(serializers.ModelSerializer):
             'passport_series': {'required': True,
                                 'error_messages': {"required": "Pasport seriyasi kiritilishi shart."}},
             'birth_date': {'required': True, 'error_messages': {"required": "Tug'ilgan sana kiritilishi shart."}},
+            'address': {'required': True, 'error_messages': {"required": "Manzilni kiritish shart"}},
         }
