@@ -9,6 +9,7 @@ class ArrivedGroup(models.Model):
         ('Tasdiqlash jarayonida', 'Tasdiqlash jarayonida'),
         ('To\'lov tasdiqlandi', 'To\'lov tasdiqlandi'),
         ('To\'lov rad etildi', 'To\'lov rad etildi'),
+        ('Topshirildi', 'Topshirildi'),
     ]
     DELIVERY_METHODS = [
         ('Punktda', 'Punktda olib ketish'),
@@ -18,6 +19,7 @@ class ArrivedGroup(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='arrived_groups',
                              verbose_name="Foydalanuvchi (UTS ID)")
     receipt_code = models.CharField(max_length=50, verbose_name="Res kodi")
+    total_weight = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Jami og'irlik (kg)")
     total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Jami summa")
     image = models.ImageField(upload_to='arrived_groups/', verbose_name="Yuklar guruhi rasmi")
     selected_cargos = models.ManyToManyField('cargo.Cargo', blank=True, related_name='selected_in_groups',
@@ -28,8 +30,22 @@ class ArrivedGroup(models.Model):
     delivery_method = models.CharField(max_length=20, choices=DELIVERY_METHODS, null=True, blank=True)
     delivery_address = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
-                                   verbose_name="Qabul qilgan admin")
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='created_groups',
+        verbose_name="Qabul qilgan admin"
+    )
+    delivered_admin = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='delivered_groups',
+        verbose_name="Topshirgan admin"
+    )
 
     def __str__(self):
         return f"{self.receipt_code} - {self.payment_status}"

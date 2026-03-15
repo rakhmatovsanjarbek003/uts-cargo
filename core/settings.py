@@ -8,10 +8,10 @@ SECRET_KEY = 'django-insecure-_mqoid!+$309xe_a+2v$+z6%m@_a_6$(ts()0o^yzt#n&^j*-b
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', '10.0.2.2', 'localhost']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-bd4a3.up.railway.app',
+    'http://10.0.2.2',
 ]
 
 INSTALLED_APPS = [

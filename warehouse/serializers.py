@@ -8,9 +8,9 @@ class ArrivedGroupListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArrivedGroup
         fields = [
-            'id', 'receipt_code', 'total_price', 'payment_status',
-            'payment_check', 'delivery_method', 'delivery_address',
-            'created_at', 'cargos', 'admin_note'
+            'id', 'receipt_code', 'total_price', 'total_weight', 'image',
+            'payment_status', 'payment_check', 'delivery_method',
+            'delivery_address', 'created_at', 'cargos', 'admin_note'
         ]
 
 class AdminArrivedGroupSerializer(serializers.ModelSerializer):

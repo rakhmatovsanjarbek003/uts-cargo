@@ -9,6 +9,21 @@ from warehouse.models import ArrivedGroup, PaymentRequest, DeliveryQueue
 class ArrivedGroupAdmin(admin.ModelAdmin):
     list_display = ('receipt_code', 'user', 'payment_status', 'created_at')
     filter_horizontal = ('selected_cargos',)
+    readonly_fields = ('display_group_image', 'display_payment_check')
+
+    def display_group_image(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="150" style="border-radius:8px;"/>', obj.image.url)
+        return "Rasm yuklanmagan"
+
+    display_group_image.short_description = "Guruh rasmi"
+
+    def display_payment_check(self, obj):
+        if obj.payment_check:
+            return format_html('<a href="{0}" target="_blank"><img src="{0}" width="300" /></a>', obj.payment_check.url)
+        return "Chek yo'q"
+
+    display_payment_check.short_description = "To'lov cheki rasmi"
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "selected_cargos":
@@ -23,6 +38,11 @@ class ArrivedGroupAdmin(admin.ModelAdmin):
             arrived_group=obj,
             arrived_admin=request.user
         )
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)
 
     class Media:
         js = ('admin/js/vendor/jquery/jquery.js', 'cargo_filter.js',)
@@ -82,13 +102,25 @@ class DeliveryQueueAdmin(admin.ModelAdmin):
 
     @admin.action(description="Tanlangan yuklarni topshirish (🚚)")
     def ship_out_cargos(self, request, queryset):
+        # 1. Hozirgi vaqtni bir marta olamiz
+        now = timezone.now()
+
         for group in queryset:
-            cargos = group.cargos.all()
-            for cargo in cargos:
-                cargo.status = 'Topshirildi'
-                cargo.delivered_at = timezone.now()
-                cargo.delivered_admin = request.user
-                cargo.updated_by = request.user
-                cargo.save()
-        self.message_user(request, "Yuklar muvaffaqiyatli topshirildi va statuslari 'Topshirildi'ga o'zgartirildi.")
-    readonly_fields = ('receipt_code', 'user', 'total_price', 'payment_status')
+            # 2. Guruh statusini va topshirgan adminni yangilaymiz
+            group.payment_status = 'Topshirildi'
+            group.delivered_admin = request.user
+            group.save()
+
+            # 3. Modelda ManyToMany field nomi 'selected_cargos'.
+            # Shuning uchun 'group.cargos' emas, 'group.selected_cargos' ishlatamiz.
+            cargos = group.selected_cargos.all()
+
+            # 4. Har bir yukni bittalab save() qilmasdan, update() orqali tezroq yangilaymiz
+            cargos.update(
+                status='Topshirildi',
+                delivered_at=now,
+                delivered_admin=request.user,
+                updated_by=request.user
+            )
+
+        self.message_user(request, f"{queryset.count()} ta guruh va ulardagi yuklar muvaffaqiyatli topshirildi.")
