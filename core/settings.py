@@ -65,9 +65,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        # Agar DATABASE_URL muhitda topilmasa (masalan, noutbukda),
-        # pastdagi eski sozlamalaringizni ishlatadi
-        default=os.environ.get('DATABASE_URL', 'postgresql://postgres:aFZPBUsgPzjasRYURLLvrwPsdpmeyfHA@postgres.railway.internal:5432/railway'),
+        # Bu yerda biz Django-ga aytamiz:
+        # 1. Birinchi navbatda Railway-dagi DATABASE_URL o'zgaruvchisini ol.
+        # 2. Agar u yo'q bo'lsa (noutbukda bo'lsangiz), localhost-ga ulan.
+        default=os.environ.get('DATABASE_URL', 'postgresql://postgres:cargo_parol@127.0.0.1:5432/uts_cargo'),
         conn_max_age=600
     )
 }
