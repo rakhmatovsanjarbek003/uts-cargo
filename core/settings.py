@@ -10,10 +10,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://uts-cargo.up.railway.app',
-]
-
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -163,3 +159,8 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     }
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://uts-cargo.up.railway.app",
+    "https://*.railway.app"
+]
