@@ -65,10 +65,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        # Bu yerda biz Django-ga aytamiz:
-        # 1. Birinchi navbatda Railway-dagi DATABASE_URL o'zgaruvchisini ol.
-        # 2. Agar u yo'q bo'lsa (noutbukda bo'lsangiz), localhost-ga ulan.
-        default=os.environ.get('DATABASE_URL', 'postgresql://postgres:cargo_parol@127.0.0.1:5432/uts_cargo'),
+        # Bu qator Railway-da barcha NAME, USER, PASSWORD-ni bittada o'qiydi
+        default=os.environ.get('DATABASE_URL'),
         conn_max_age=600
     )
 }
@@ -163,5 +161,4 @@ JAZZMIN_UI_TWEAKS = {
 
 CSRF_TRUSTED_ORIGINS = [
     "https://uts-cargo.up.railway.app",
-    "https://*.railway.app"
 ]
